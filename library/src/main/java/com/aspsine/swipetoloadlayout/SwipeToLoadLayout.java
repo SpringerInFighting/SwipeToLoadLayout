@@ -235,6 +235,19 @@ public class SwipeToLoadLayout extends ViewGroup {
      */
     private int mDefaultToLoadingMoreScrollingDuration = DEFAULT_DEFAULT_TO_LOADING_MORE_SCROLLING_DURATION;
 
+    public int getCustomHeaderOffset() {
+        return customHeaderOffset;
+    }
+
+    public void setCustomHeaderOffset(int customHeaderOffset) {
+        this.customHeaderOffset = customHeaderOffset;
+    }
+
+    /**
+     * 自定义头部偏移量
+     */
+    private int customHeaderOffset = 0;
+
     /**
      * the style enum
      */
@@ -552,7 +565,9 @@ public class SwipeToLoadLayout extends ViewGroup {
                 if (Math.abs(xDiff) > Math.abs(yDiff) && Math.abs(xDiff) > mTouchSlop) {
                     return false;
                 }
-
+                if(yDiff <= 0){
+                    mRefreshCallback.onReset();
+                }
                 if (STATUS.isStatusDefault(mStatus)) {
                     if (yDiff > 0 && onCheckCanRefresh()) {
                         mRefreshCallback.onPrepare();
@@ -1024,27 +1039,29 @@ public class SwipeToLoadLayout extends ViewGroup {
             switch (mStyle) {
                 case STYLE.CLASSIC:
                     // classic
-                    headerTop = paddingTop + lp.topMargin - mHeaderHeight + mHeaderOffset;
+                    headerTop = paddingTop + lp.topMargin - mHeaderHeight + mHeaderOffset + customHeaderOffset;
+                    //headerTop = mHeaderOffset;
                     break;
                 case STYLE.ABOVE:
                     // classic
-                    headerTop = paddingTop + lp.topMargin - mHeaderHeight + mHeaderOffset;
+                    headerTop = paddingTop + lp.topMargin - mHeaderHeight + mHeaderOffset + customHeaderOffset;
                     break;
                 case STYLE.BLEW:
                     // blew
-                    headerTop = paddingTop + lp.topMargin;
+                    headerTop = paddingTop + lp.topMargin + customHeaderOffset;
                     break;
                 case STYLE.SCALE:
                     // scale
-                    headerTop = paddingTop + lp.topMargin - mHeaderHeight / 2 + mHeaderOffset / 2;
+                    headerTop = paddingTop + lp.topMargin - mHeaderHeight / 2 + mHeaderOffset / 2 + customHeaderOffset;
                     break;
                 default:
                     // classic
-                    headerTop = paddingTop + lp.topMargin - mHeaderHeight + mHeaderOffset;
+                    headerTop = paddingTop + lp.topMargin - mHeaderHeight + mHeaderOffset + customHeaderOffset;
                     break;
             }
             final int headerRight = headerLeft + headerView.getMeasuredWidth();
             final int headerBottom = headerTop + headerView.getMeasuredHeight();
+            //Log.e(TAG, "layoutChildren: headerTop: " + headerTop + "paddingTop: " + paddingTop + " lp.topMargin: " + lp.topMargin + " mHeaderHeight: "  + mHeaderHeight + " mHeaderOffset: " + mHeaderOffset  );
             headerView.layout(headerLeft, headerTop, headerRight, headerBottom);
         }
 

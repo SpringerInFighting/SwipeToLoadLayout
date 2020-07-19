@@ -99,6 +99,7 @@ public class TwitterRecyclerFragment extends BaseFragment implements OnRefreshLi
 
         swipeToLoadLayout.setOnRefreshListener(this);
         swipeToLoadLayout.setOnLoadMoreListener(this);
+        swipeToLoadLayout.setCustomHeaderOffset(240);
 
         recyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
